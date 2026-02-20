@@ -12,7 +12,9 @@ if [ ! -e "$TARGET" ]; then
     exit 1
 fi
 
-HASH_FILE="hashes.db"
+HASH_FILE="hashes.db" 
+
+chmod 600 "$HASH_FILE" 2>/dev/null || touch "$HASH_FILE" && chmod 600 "$HASH_FILE"
 
 case "$ACTION" in
     init)
