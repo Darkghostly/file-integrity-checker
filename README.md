@@ -45,5 +45,5 @@ Caso um arquivo de log tenha recebido novas entradas de forma legítima, atualiz
 ```
 
 ## 👨‍💻 Autor
-Desenvolvido por **Gustavo Bueno da Silva (Darkghostly)**.
+Desenvolvido por **Gustavo Bueno da Silva (Darkghostly)**. <br>
 Focado no desenvolvimento de soluções em Cybersecurity e especialização em DevSecOps.
