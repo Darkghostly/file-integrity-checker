@@ -36,6 +36,22 @@ case "$ACTION" in
             exit 1
         fi
 
+        if [ -d "$TARGET" ]; then
+            echo "[*] Escaneando todos os arquivos do diretório..."
+
+            find "$TARGET" -type f | while read -r ARQUIVO; do
+                CURRENT_HASH=$(sha256sum "$ARQUIVO" | awk '{print $1}')
+                SAVED_HASH=$(grep "$ARQUIVO" "$HASH_FILE" | awk '{print $1}')
+
+                if [ -z "$SAVED_HASH"]; then
+                    echo "[?] NOVO: $ARQUIVO (Não consta na baseline)"
+                elif [ "$CURRENT_HASH" == "$SAVED_HASH" ]; then
+                    echo "[OK] INTACTO: $ARQUIVO"
+                else
+                    echo "[ALERTA] MODIFICADO: $ARQUIVO (Hash mismatch)"
+                fi
+            done
+
         if [ -f "$TARGET" ]; then
             
             CURRENT_HASH=$(sha256sum "$TARGET" | awk '{print $1}')
