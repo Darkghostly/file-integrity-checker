@@ -52,7 +52,7 @@ case "$ACTION" in
                 fi
             done
 
-        if [ -f "$TARGET" ]; then
+        elif [ -f "$TARGET" ]; then
             
             CURRENT_HASH=$(sha256sum "$TARGET" | awk '{print $1}')
             
@@ -72,6 +72,7 @@ case "$ACTION" in
             echo "Erro: O alvo precisa ser um arquivo válido para a verificação."
         fi
         ;;
+        
     update)
         echo "[*] Atualizando o hash salvo para: $TARGET"
         
