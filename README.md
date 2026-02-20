@@ -1,5 +1,5 @@
 # File Integrity Monitor (FIM) - Bash Edition
-** Ideia do projeto: https://roadmap.sh/projects/file-integrity-checker
+* **Ideia do projeto: https://roadmap.sh/projects/file-integrity-checker
 
 Uma ferramenta de linha de comando leve e eficiente para Monitoramento de Integridade de Arquivos (FIM), escrita totalmente em Bash. Projetada para atuar como uma camada de defesa em ambientes Linux, esta ferramenta utiliza hashes criptográficos (SHA-256) para criar uma linha de base (baseline) de arquivos de log ou diretórios críticos, permitindo a detecção rápida de alterações não autorizadas.
 
