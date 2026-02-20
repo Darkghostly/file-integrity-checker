@@ -12,22 +12,16 @@ if [ ! -e "$TARGET" ]; then
     exit 1
 fi
 
-# Definindo o nome do nosso banco de dados
 HASH_FILE="hashes.db"
 
-# O 'Cérebro' do Menu: A estrutura CASE avalia a variável ACTION
 case "$ACTION" in
     init)
         echo "[*] Iniciando a criação da linha de base para: $TARGET"
         
-        # Se o alvo for uma pasta (-d)
         if [ -d "$TARGET" ]; then
-            # O comando 'find' procura todos os arquivos (-type f) dentro da pasta
-            # e executa o 'sha256sum' em cada um deles. O '>' salva o resultado no HASH_FILE.
             find "$TARGET" -type f -exec sha256sum {} + > "$HASH_FILE"
             echo "[+] Hashes gerados com sucesso para os arquivos do diretório e salvos em $HASH_FILE."
             
-        # Se o alvo for um arquivo único (-f)
         elif [ -f "$TARGET" ]; then
             sha256sum "$TARGET" > "$HASH_FILE"
             echo "[+] Hash gerado com sucesso para o arquivo e salvo em $HASH_FILE."
@@ -35,15 +29,38 @@ case "$ACTION" in
         ;;
         
     check)
-        echo "[*] Função 'check' será construída em breve..."
-        ;;
+        echo "[*] Verificando a integridade de: $TARGET"
         
+        if [ ! -f "$HASH_FILE" ]; then
+            echo "Erro: Arquivo de baseline ($HASH_FILE) não encontrado. Execute o 'init' primeiro."
+            exit 1
+        fi
+
+        if [ -f "$TARGET" ]; then
+            
+            CURRENT_HASH=$(sha256sum "$TARGET" | awk '{print $1}')
+            
+            SAVED_HASH=$(grep "$TARGET" "$HASH_FILE" | awk '{print $1}')
+            
+            if [ -z "$SAVED_HASH" ]; then
+                echo "Status: Arquivo Novo (Não consta na baseline)"
+                
+            elif [ "$CURRENT_HASH" == "$SAVED_HASH" ]; then
+                echo "Status: Unmodified"
+                
+            else
+                echo "Status: Modified (Hash mismatch) - ALERTA DE ADULTERAÇÃO!"
+            fi
+            
+        else
+            echo "Erro: O alvo precisa ser um arquivo válido para a verificação."
+        fi
+        ;;
     update)
         echo "[*] Função 'update' será construída em breve..."
         ;;
         
     *)
-        # Se o usuário não digitar init, check ou update
         echo "Erro: Ação '$ACTION' desconhecida."
         echo "Ações válidas: init, check, update"
         exit 1
