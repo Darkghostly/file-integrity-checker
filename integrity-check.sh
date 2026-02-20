@@ -57,7 +57,23 @@ case "$ACTION" in
         fi
         ;;
     update)
-        echo "[*] Função 'update' será construída em breve..."
+        echo "[*] Atualizando o hash salvo para: $TARGET"
+        
+        if [ ! -f "$HASH_FILE" ]; then
+            echo "Erro: Arquivo de baseline ($HASH_FILE) não encontrado."
+            exit 1
+        fi
+
+        if [ -f "$TARGET" ]; then  
+            grep -v "$TARGET" "$HASH_FILE" > temp_hashes.db
+            mv temp_hashes.db "$HASH_FILE"
+            sha256sum "$TARGET" >> "$HASH_FILE"
+            
+            echo "[+] Hash atualizado com sucesso no banco de dados!"
+            
+        else
+            echo "Erro: O alvo precisa ser um arquivo válido para a atualização."
+        fi
         ;;
         
     *)
